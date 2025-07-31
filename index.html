@@ -16,71 +16,179 @@
 
   <script>
 
-    choiceArray = ["Bear", "Ninja", "Hunter"];
+  // Assigning game tracking variables.
+  let gamesPlayed = 0;
+  let gamesWon = 0;
+  let gamesLost = 0;
+  let storedPlayerName = null;
+  let gameRunning = true;
 
 
-    // Prompt the player for their name.
-    let playerName = prompt('Welcome to Bear Hunter Ninja! Please enter your name to get started:'); 
-    
-    // Log the name to the console and display a cosnfirmation message.
-    let nameConfirmation = `Hi ${playerName} Let's play!!`;
+  // Main game loop that continues until the player chooses to stop playing. Also assigning variables for the player character, outcome, and player name.
+  while (gameRunning) {
+    let choiceArray = ["Bear", "Ninja", "Hunter"];
+    let playerCharacter;
+    let outcome;
+    let playerName;
+
+    // Prompt the player for their name. Use a loop to reprompt for errors.
+    while (true) {
+      playerName = prompt('Welcome to Bear Hunter Ninja! Please enter your name to get started:');
+
+      // Check if the player pressed cancel or entered an empty string. End the game if they do.
+      if (playerName === null || playerName.trim() === "") {
+        document.getElementById('output').innerHTML = "Please Press F5 to Play Again.";
+        gameRunning = false;
+        break;
+      }
+
+      // Trim whitespace.
+      playerName = playerName.trim();
+
+      // If the  Player Name isn't stored, it.
+      if (storedPlayerName === null) {
+        storedPlayerName = playerName;
+      }
+
+      // If there already is a stored player name, confirm it matches the stored name. If it matches, the game continues.
+      if (storedPlayerName === playerName) {
+        let nameConfirmation = `Hi ${playerName} Let's play!!`;
         console.log(nameConfirmation + ' this is an example of a hardcoded text string concatenated after a variable.'); 
         alert(nameConfirmation);
+        break;
+      }
+      // If the player name doesn't match the stored name, the player is reprompted.
+      if (storedPlayerName !== playerName) {
+        alert("That name doesn't match your original name. Please try again.");
+        document.getElementById('output').innerHTML = "Please Press F5 to Play Again.";
+      } else { 
+        break;
+      }
+    }
 
-    // Prompt the player to choose a character and set computer character to Bear.
-    let playerCharacter = prompt('Who are you: Bear, Ninja, or Hunter?');
-    let computerCharacter = "Bear";
+    // Check if the game is not running, break out of the loop if not.
+    if (!gameRunning) break;
+
+    // Prompt the player to choose a character. Use a loop to reprompt for errors.
+    while (true) {
+      playerCharacter = prompt('Who are you: Bear, Ninja, or Hunter?');
+
+      // Check if the player pressed cancel or entered an empty string. End the game if they do.
+      if (playerCharacter === null || playerCharacter.trim() === "") {
+        document.getElementById('output').innerHTML = "Please Press F5 to Play Again.";
+        gameRunning = false;
+        break;
+      }
+
+      // Trim whitespace and capitalize the first letter of the player's choice.
+      playerCharacter = playerCharacter.trim().toLowerCase();
+      playerCharacter = playerCharacter.charAt(0).toUpperCase() + playerCharacter.slice(1);
+
+
+      // Check if the player's choice is valid by going through array. If it isn't, the player is reprompted. If it is, the loop breaks.
+      if (!choiceArray.includes(playerCharacter)) {
+        document.getElementById('output').innerHTML = "Invalid Entry<br>Please Press F5 to Play Again.";
+        alert("Invalid entry, you must choose Bear, Ninja, or Hunter.");
+      } else {
+        break;
+      }
+    }
+
+    // Check if the game is not running, break out of the loop if not.
+    if (!gameRunning) break;
+
+    //Chooses a random number between 0 and 2 then uses that number to select a character from the choiceArray (0, 1, 2).
+    let randomIndex = Math.floor(Math.random() * choiceArray.length);
+    let computerCharacter = choiceArray[randomIndex];
 
     // Switch statements nested in if else conditionals to determine the outcome of the game based on the player's choice and the computers choice. The outcome variable is assigned.
-  if (computerCharacter === "Bear") {
-    switch (playerCharacter) {
+    if (computerCharacter === "Bear") {
+      switch (playerCharacter) {
         case "Bear":
-            outcome = "It's a tie!!";
-            break;
+          outcome = "It's a tie!!";
+          break;
         case "Ninja":
-            outcome = "You Lose!!";
-            break;
+          outcome = "You Lose!!";
+          break;
         case "Hunter":
-            outcome = "You Win!!";
-            break;
+          outcome = "You Win!!";
+          break;
+      }
     }
-  }
-  else if (computerCharacter === "Ninja") {
-    switch (playerCharacter) {
+    else if (computerCharacter === "Ninja") {
+      switch (playerCharacter) {
         case "Bear":
-            outcome = "You Win!!";
-            break;
+          outcome = "You Win!!";
+          break;
         case "Ninja":
-            outcome = "It's a tie!!";
-            break;
+          outcome = "It's a tie!!";
+          break;
         case "Hunter":
-            outcome = "You Lose!!";
-            console.log(outcome);
-            break;
+          outcome = "You Lose!!";
+          console.log(outcome);
+          break;
+      }
     }
-  }
-  else if (computerCharacter === "Hunter") {
-    switch (playerCharacter) {
+    else if (computerCharacter === "Hunter") {
+      switch (playerCharacter) {
         case "Bear":
-            outcome = "You Lose!!";
-            break;
+          outcome = "You Lose!!";
+          break;
         case "Ninja":
-            outcome = "You Win!!";
-            console.log(outcome);
-            break;
+          outcome = "You Win!!";
+          console.log(outcome);
+          break;
         case "Hunter":
-            outcome = "It's a tie!!";
-            break;
+          outcome = "It's a tie!!";
+          break;
+      }
     }
-  }
 
     // Create player and computer result message.
     let playerResult = `${playerName}, You picked ${playerCharacter}!`;
     let computerResult = `The computer picked ${computerCharacter}!`;
-        // Concatenate playerResult, computerResult, and outcome messages then log the concatenated message to the console and display it on the page by changing the innerHTML of the output element.
-        console.log(`${playerResult}\n${computerResult}\n${outcome}`);
-        document.getElementById('output').innerHTML = playerResult + '<br>' + computerResult + '<br>' + outcome;
+    
+    // Concatenate playerResult, computerResult, and outcome messages then log the concatenated message to the console and display it on the page by changing the innerHTML of the output element.
+    console.log(`${playerResult}\n${computerResult}\n${outcome}`);
+    
+    // Increment the gamesPlayed variable and check if the player won or lost, increment the respective counters.
+    gamesPlayed++;
+    
+    if (outcome === "You Win!!") {
+      gamesWon++;
+    } 
+    else if (outcome === "You Lose!!") {
+      gamesLost++;
+    }
+    
+    // Display the results on the page.
+    document.getElementById('output').innerHTML = playerResult + '<br>' + computerResult + '<br>' + outcome + '<br>' + `Games Played: ${gamesPlayed} | Wins: ${gamesWon} | Losses: ${gamesLost}`;
 
+    // If the game is over, prompt the player to play again.
+    while (true) {
+      let playAgain = prompt(`${playerName}, would you like to play again, Yes or No?`);
+
+      // Check if the player pressed cancel or entered an empty string. End the game if they do.
+      if (playAgain === null || playerName.trim() === "") {
+        document.getElementById('output').innerHTML = "Please Press F5 to Play Again.";
+        gameRunning = false;
+        break;
+      }
+
+      // Trim whitespace and capitalize the first letter of the player's choice.
+      playAgain = playAgain.trim().toLowerCase();
+      playAgain = playAgain.charAt(0).toUpperCase() + playAgain.slice(1);
+
+      // If the players enters No, the game ends by changing gameRunning to false. If they enter Yes, the loop breaks and the game continues.
+      if (playAgain === "No") {
+        gameRunning = false;
+        break;
+      }
+      if (playAgain === "Yes") {
+        break;
+      }
+    }
+  }
   </script>
 </body>
 </html>
