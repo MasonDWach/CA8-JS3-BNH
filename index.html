@@ -31,7 +31,7 @@
     let outcome;
     let playerName;
 
-    // Prompt the player for their name. Use a loop to reprompt for errors.
+    // Prompt the player for their name. Use a loop to add potential for reprompts(see other branch).
     while (true) {
       playerName = prompt('Welcome to Bear Hunter Ninja! Please enter your name to get started:');
 
@@ -57,10 +57,11 @@
         alert(nameConfirmation);
         break;
       }
-      // If the player name doesn't match the stored name, the player is reprompted.
+      // If the player name doesn't match the stored name, the game ends and HTML is added with replay instructions.
       if (storedPlayerName !== playerName) {
-        alert("That name doesn't match your original name. Please try again.");
-        document.getElementById('output').innerHTML = "Please Press F5 to Play Again.";
+        document.getElementById('output').innerHTML = "Invalid Entry<br>Please Press F5 to Play Again.";
+        gameRunning = false;
+        break;
       } else { 
         break;
       }
@@ -69,7 +70,7 @@
     // Check if the game is not running, break out of the loop if not.
     if (!gameRunning) break;
 
-    // Prompt the player to choose a character. Use a loop to reprompt for errors.
+    // Prompt the player to choose a character. Check to make sure they are inputting correct data. Added loops for potential reprompts(see other branch).
     while (true) {
       playerCharacter = prompt('Who are you: Bear, Ninja, or Hunter?');
 
@@ -85,10 +86,11 @@
       playerCharacter = playerCharacter.charAt(0).toUpperCase() + playerCharacter.slice(1);
 
 
-      // Check if the player's choice is valid by going through array. If it isn't, the player is reprompted. If it is, the loop breaks.
+      // Check if the player's choice is valid by going through array. If it isn't, the game ends. If it is, the loop breaks and game continues.
       if (!choiceArray.includes(playerCharacter)) {
         document.getElementById('output').innerHTML = "Invalid Entry<br>Please Press F5 to Play Again.";
-        alert("Invalid entry, you must choose Bear, Ninja, or Hunter.");
+        gameRunning = false;
+        break;
       } else {
         break;
       }
@@ -169,7 +171,7 @@
       let playAgain = prompt(`${playerName}, would you like to play again, Yes or No?`);
 
       // Check if the player pressed cancel or entered an empty string. End the game if they do.
-      if (playAgain === null || playerName.trim() === "") {
+      if (playAgain === null || playAgain.trim() === "") {
         document.getElementById('output').innerHTML = "Please Press F5 to Play Again.";
         gameRunning = false;
         break;
